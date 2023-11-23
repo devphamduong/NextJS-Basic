@@ -7,6 +7,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Link from "next/link";
 interface IProps {
   data: ITrackTop[];
 }
@@ -72,6 +73,10 @@ function MainSlider(props: IProps) {
             width: "100%",
             height: "200px",
           },
+          a: {
+            textDecoration: "none",
+            color: "unset",
+          },
         },
       }}
     >
@@ -84,7 +89,9 @@ function MainSlider(props: IProps) {
                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${item.imgUrl}`}
                 alt={item.title}
               />
-              <h4>{item.title}</h4>
+              <Link href={`/track/${item._id}?audio=${item.trackUrl}`}>
+                <h4 style={{ cursor: "pointer" }}>{item.title}</h4>
+              </Link>
               <h5>{item.description}</h5>
             </div>
           );
