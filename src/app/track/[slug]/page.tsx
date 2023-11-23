@@ -5,11 +5,11 @@ import { useSearchParams } from "next/navigation";
 function DetailTrackPage(props: any) {
   const { params } = props;
   const searchParams = useSearchParams();
-  const search = searchParams.get("audio");
+  const audio = searchParams.get("audio");
 
   return (
     <>
-      <WaveTrack />
+      <WaveTrack audio={audio} />
     </>
   );
 }

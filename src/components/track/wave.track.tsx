@@ -1,21 +1,24 @@
 "use client";
 import WaveSurfer from "wavesurfer.js";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-function WaveTrack() {
+function WaveTrack(props: any) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { audio } = props;
+
   useEffect(() => {
     const wavesurfer = WaveSurfer.create({
-      container: document.getElementById("wave")!,
+      container: ref.current!,
       waveColor: "rgb(200, 0, 200)",
       progressColor: "rgb(100, 0, 100)",
-      url: "/audio/DieForYou.mp3",
+      url: `/api?audio=${audio}`,
     });
     wavesurfer.on("click", () => {
       wavesurfer.play();
     });
   }, []);
 
-  return <div className="" id="wave"></div>;
+  return <div ref={ref}></div>;
 }
 
 export default WaveTrack;
