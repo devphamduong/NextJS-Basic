@@ -3,7 +3,7 @@ import { sendRequest } from "@/utils/api";
 import { Container } from "@mui/material";
 
 export default async function HomePage() {
-  const res = await sendRequest<IBackendRes<ITrackTop[]>>({
+  const chills = await sendRequest<IBackendRes<ITrackTop[]>>({
     url: "http://localhost:8000/api/v1/tracks/top",
     method: "POST",
     body: {
@@ -11,10 +11,28 @@ export default async function HomePage() {
       limit: 10,
     },
   });
+  const workout = await sendRequest<IBackendRes<ITrackTop[]>>({
+    url: "http://localhost:8000/api/v1/tracks/top",
+    method: "POST",
+    body: {
+      category: "WORKOUT",
+      limit: 10,
+    },
+  });
+  const party = await sendRequest<IBackendRes<ITrackTop[]>>({
+    url: "http://localhost:8000/api/v1/tracks/top",
+    method: "POST",
+    body: {
+      category: "PARTY",
+      limit: 10,
+    },
+  });
 
   return (
     <Container>
-      <MainSlider />
+      <MainSlider data={chills?.data ?? []} />
+      <MainSlider data={workout?.data ?? []} />
+      <MainSlider data={party?.data ?? []} />
     </Container>
   );
 }
