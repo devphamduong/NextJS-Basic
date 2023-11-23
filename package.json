@@ -15,9 +15,13 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@types/react-slick": "^0.23.12",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-h5-audio-player": "3.8.6",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@types/node": "latest",
