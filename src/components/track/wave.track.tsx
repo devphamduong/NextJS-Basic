@@ -8,6 +8,7 @@ import React, {
   useMemo,
 } from "react";
 import { WaveSurferOptions } from "wavesurfer.js";
+import "./wave.track.scss";
 
 function WaveTrack(props: any) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -69,10 +70,19 @@ function WaveTrack(props: any) {
   useEffect(() => {
     if (!wavesurfer) return;
     setIsPlaying(false);
-
+    const timeEl = document.querySelector("#time")!;
+    const durationEl = document.querySelector("#duration")!;
     const subscriptions = [
       wavesurfer.on("play", () => setIsPlaying(true)),
       wavesurfer.on("pause", () => setIsPlaying(false)),
+      wavesurfer.on(
+        "decode",
+        (duration) => (durationEl.textContent = formatTime(duration))
+      ),
+      wavesurfer.on(
+        "timeupdate",
+        (currentTime) => (timeEl.textContent = formatTime(currentTime))
+      ),
     ];
 
     return () => {
@@ -80,10 +90,24 @@ function WaveTrack(props: any) {
     };
   }, [wavesurfer]);
 
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secondsRemainder = Math.round(seconds) % 60;
+    const paddedSeconds = `0${secondsRemainder}`.slice(-2);
+    return `${minutes}:${paddedSeconds}`;
+  };
+
   return (
     <>
-      <div ref={containerRef} style={{ minHeight: "120px" }} />
-
+      <div
+        ref={containerRef}
+        style={{ minHeight: "120px" }}
+        className="wave-form-container"
+      >
+        <div id="time">0:00</div>
+        <div id="duration">0:00</div>
+        <div id="hover"></div>
+      </div>
       <button onClick={onPlayClick} style={{ marginTop: "1em" }}>
         {isPlaying ? "Pause" : "Play"}
       </button>
