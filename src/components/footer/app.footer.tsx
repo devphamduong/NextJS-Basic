@@ -17,8 +17,9 @@ function AppFooter() {
     >
       <Container sx={{ display: "flex", gap: 10, alignItems: "center" }}>
         <AudioPlayer
+          autoPlay={false}
           style={{ boxShadow: "none", backgroundColor: "transparent" }}
-          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/CHILL.mp3`}
           onPlay={(e) => console.log("onPlay")}
           volume={0.2}
         />
