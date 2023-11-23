@@ -1,5 +1,5 @@
 "use client";
-
+import WaveTrack from "@/components/track/wave.track";
 import { useSearchParams } from "next/navigation";
 
 function DetailTrackPage(props: any) {
@@ -7,7 +7,11 @@ function DetailTrackPage(props: any) {
   const searchParams = useSearchParams();
   const search = searchParams.get("audio");
 
-  return <></>;
+  return (
+    <>
+      <WaveTrack />
+    </>
+  );
 }
 
 export default DetailTrackPage;
