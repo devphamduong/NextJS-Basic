@@ -11,6 +11,7 @@ import { WaveSurferOptions } from "wavesurfer.js";
 import "./wave.track.scss";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { Tooltip } from "@mui/material";
 
 function WaveTrack(props: any) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -90,7 +91,7 @@ function WaveTrack(props: any) {
       avatar: "http://localhost:8000/images/chill1.png",
       moment: 30,
       user: "username 2",
-      content: "just a comment3",
+      content: "just a comment2",
     },
     {
       id: 3,
@@ -236,18 +237,23 @@ function WaveTrack(props: any) {
             <div className="comments" style={{ position: "relative" }}>
               {arrComments.map((item, index) => {
                 return (
-                  <img
-                    key={item.id}
-                    style={{
-                      height: 20,
-                      width: 20,
-                      position: "absolute",
-                      top: 71,
-                      left: calcLeft(item.moment),
-                      zIndex: 9,
-                    }}
-                    src={`http://localhost:8000/images/chill1.png`}
-                  />
+                  <Tooltip key={item.id} title={item.content} arrow>
+                    <img
+                      onPointerMove={(e) => {
+                        const hover = hoverRef.current!;
+                        hover.style.width = calcLeft(item.moment);
+                      }}
+                      style={{
+                        height: 20,
+                        width: 20,
+                        position: "absolute",
+                        top: 71,
+                        left: calcLeft(item.moment),
+                        zIndex: 9,
+                      }}
+                      src={`http://localhost:8000/images/chill1.png`}
+                    />
+                  </Tooltip>
                 );
               })}
             </div>
