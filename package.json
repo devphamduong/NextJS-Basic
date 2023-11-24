@@ -17,6 +17,7 @@
     "@mui/material": "latest",
     "@types/react-slick": "^0.23.12",
     "next": "latest",
+    "next-auth": "^4.24.5",
     "query-string": "8.1.0",
     "react": "latest",
     "react-dom": "latest",
