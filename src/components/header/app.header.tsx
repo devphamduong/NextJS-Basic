@@ -19,6 +19,7 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,11 +62,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
+  const { data: session } = useSession();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -205,10 +206,18 @@ export default function AppHeader() {
                 },
               }}
             >
-              <Link href={"/playlist"}>Playlists</Link>
-              <Link href={"/like"}>Likes</Link>
-              <Link href={"/upload"}>Upload</Link>
-              <Avatar onClick={handleProfileMenuOpen}>PC</Avatar>
+              {session ? (
+                <>
+                  <Link href={"/playlist"}>Playlists</Link>
+                  <Link href={"/like"}>Likes</Link>
+                  <Link href={"/upload"}>Upload</Link>
+                  <Avatar onClick={handleProfileMenuOpen}>PC</Avatar>
+                </>
+              ) : (
+                <>
+                  <Link href={"/api/auth/signin"}>Log In</Link>
+                </>
+              )}
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
