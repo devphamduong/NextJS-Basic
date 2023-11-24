@@ -1,7 +1,4 @@
-import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
-import AppFooter from "@/components/footer/app.footer";
-import AppHeader from "@/components/header/app.header";
-import NextAuthWrapper from "@/lib/next.auth.wrapper";
+import "@/styles/app.scss";
 
 export default function RootLayout({
   children,
