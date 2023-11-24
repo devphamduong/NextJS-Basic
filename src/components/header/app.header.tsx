@@ -113,7 +113,12 @@ export default function AppHeader() {
         </Link>
       </MenuItem>
       <MenuItem>
-        <Link href={"logout"}>Log Out</Link>
+        <Link
+          href={"/api/auth/signout"}
+          style={{ color: "unset", textDecoration: "unset" }}
+        >
+          Sign Out
+        </Link>
       </MenuItem>
     </Menu>
   );
@@ -215,7 +220,7 @@ export default function AppHeader() {
                 </>
               ) : (
                 <>
-                  <Link href={"/api/auth/signin"}>Log In</Link>
+                  <Link href={"/api/auth/signin"}>Sign In</Link>
                 </>
               )}
             </Box>
