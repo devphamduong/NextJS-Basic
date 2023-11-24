@@ -12,6 +12,19 @@ export const authOptions: AuthOptions = {
     }),
     // ...add more providers here
   ],
+  callbacks: {
+    async jwt({ token, user, account, profile, trigger }) {
+      if (trigger === "signIn" && account?.provider === "github") {
+        token.address = "abc";
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      // Send properties to the client, like an access_token from a provider.
+      session.address = token.address;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
