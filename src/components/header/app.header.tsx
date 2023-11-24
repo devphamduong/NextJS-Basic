@@ -19,7 +19,7 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -215,7 +215,7 @@ export default function AppHeader() {
                 </>
               ) : (
                 <>
-                  <div onClick={() => signIn()}>Sign In</div>
+                  <Link href={"/auth/signin"}>Sign In</Link>
                 </>
               )}
             </Box>

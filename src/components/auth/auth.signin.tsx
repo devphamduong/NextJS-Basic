@@ -9,6 +9,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
+import { signIn } from "next-auth/react";
 
 function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -121,8 +122,18 @@ function SignInPage() {
             justifyContent="space-evenly"
             alignItems="center"
           >
-            <GitHubIcon sx={{ cursor: "pointer" }} />
-            <GoogleIcon sx={{ cursor: "pointer" }} />
+            <div onClick={() => signIn("github")} style={{ cursor: "pointer" }}>
+              <GitHubIcon
+                titleAccess="Sign in with GitHub"
+                sx={{ height: 35, width: 35 }}
+              />
+            </div>
+            <div style={{ cursor: "pointer" }}>
+              <GoogleIcon
+                titleAccess="Sign in with Google"
+                sx={{ height: 35, width: 35 }}
+              />
+            </div>
           </Grid>
         </Grid>
       </Grid>
