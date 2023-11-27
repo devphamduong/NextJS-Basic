@@ -69,16 +69,16 @@ function Step1(props: IProps) {
                 );
                 props.setTrackUpload({
                   ...props.trackUpload,
-                  fileName: acceptedFiles[0],
+                  fileName: acceptedFiles[0].name,
                   progress: percentCompleted,
                 });
               },
             }
           );
-          props.setTrackUpload({
-            ...props.trackUpload,
+          props.setTrackUpload((prevState: any) => ({
+            ...prevState,
             fileUrl: res.data.data.fileName,
-          });
+          }));
         } catch (error: any) {
           console.log(error?.response?.data?.message);
         }
