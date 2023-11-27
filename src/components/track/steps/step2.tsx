@@ -10,6 +10,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
@@ -76,6 +78,27 @@ function InputFileUpload() {
 }
 
 function Step2() {
+  const [category, setCategory] = useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setCategory(event.target.value);
+  };
+
+  const categories = [
+    {
+      value: "CHILL",
+      label: "CHILL",
+    },
+    {
+      value: "WORKOUT",
+      label: "WORKOUT",
+    },
+    {
+      value: "PARTY",
+      label: "PARTY",
+    },
+  ];
+
   return (
     <>
       <LinearWithValueLabel />
@@ -87,13 +110,24 @@ function Step2() {
           flexDirection={"column"}
           gap={1}
         >
-          <div style={{ width: 300, height: 300, background: "#ccc" }}></div>
+          <div style={{ width: 250, height: 250, background: "#ccc" }}></div>
           <InputFileUpload />
         </Grid>
         <Grid xs={8} display={"flex"} flexDirection={"column"} gap={3}>
           <TextField label="Title" variant="standard" fullWidth />
           <TextField label="Description" variant="standard" fullWidth />
-          <TextField label="Category" variant="standard" fullWidth />
+          <TextField
+            select
+            variant="standard"
+            label="Category"
+            defaultValue="CHILL"
+          >
+            {categories.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
           <Button variant="outlined" sx={{ width: "fit-content" }}>
             Save
           </Button>

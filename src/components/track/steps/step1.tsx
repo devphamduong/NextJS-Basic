@@ -5,6 +5,9 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useCallback } from "react";
+import { sendRequestFile } from "@/utils/api";
+import { useSession } from "next-auth/react";
+import axios from "axios";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -33,11 +36,36 @@ function InputFileUpload() {
 }
 
 function Step1() {
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    // Do something with the files
-  }, []);
+  const { data: session } = useSession();
+  const onDrop = useCallback(
+    async (acceptedFiles: FileWithPath[]) => {
+      if (acceptedFiles && acceptedFiles[0]) {
+        const audio = acceptedFiles[0];
+        const formData = new FormData();
+        formData.append("fileUpload", audio);
+        try {
+          const res = await axios.post(
+            "http://localhost:8000/api/v1/files/upload",
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.access_token}`,
+                target_type: "tracks",
+              },
+            }
+          );
+        } catch (error) {
+          console.log(error?.response?.data?.message);
+        }
+      }
+    },
+    [session]
+  );
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     onDrop,
+    accept: {
+      audio: [".mp3"],
+    },
   });
   const files = acceptedFiles.map((file: FileWithPath) => (
     <li key={file.path}>
