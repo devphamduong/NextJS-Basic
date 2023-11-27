@@ -46,7 +46,6 @@ function SignInPage() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -124,6 +123,11 @@ function SignInPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSignIn();
+                  }
+                }}
                 helperText={
                   !isValidPassword ? "Please enter your password" : ""
                 }
@@ -188,8 +192,8 @@ function SignInPage() {
       <Snackbar
         open={open}
         autoHideDuration={5000}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        key={"top" + "right"}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        key={"top" + "center"}
         onClose={handleClose}
       >
         <Alert severity="error" sx={{ width: "100%" }}>
