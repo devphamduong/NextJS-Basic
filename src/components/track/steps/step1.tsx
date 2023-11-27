@@ -46,19 +46,17 @@ function Step1() {
   ));
 
   return (
-    <>
-      <section className="container">
-        <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <InputFileUpload />
-          <p>Drag 'n' drop some files here, or click to select file</p>
-        </div>
-        <aside>
-          <h4>Files</h4>
-          <ul>{files}</ul>
-        </aside>
-      </section>
-    </>
+    <section className="container">
+      <div {...getRootProps({ className: "dropzone" })}>
+        <input {...getInputProps()} />
+        <InputFileUpload />
+        <p>Drag 'n' drop some files here, or click to select file</p>
+      </div>
+      <aside>
+        <h4>Files</h4>
+        <ul>{files}</ul>
+      </aside>
+    </section>
   );
 }
 
