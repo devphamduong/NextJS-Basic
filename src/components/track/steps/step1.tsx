@@ -4,8 +4,7 @@ import "./theme.scss";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useCallback } from "react";
-import { sendRequestFile } from "@/utils/api";
+import { useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
@@ -35,11 +34,17 @@ function InputFileUpload() {
   );
 }
 
-function Step1() {
+interface IProps {
+  setValue: (v: number) => void;
+  setTrackUpload: (v: any) => void;
+}
+
+function Step1(props: IProps) {
   const { data: session } = useSession();
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[]) => {
       if (acceptedFiles && acceptedFiles[0]) {
+        props.setValue(1);
         const audio = acceptedFiles[0];
         const formData = new FormData();
         formData.append("fileUpload", audio);
@@ -51,10 +56,20 @@ function Step1() {
               headers: {
                 Authorization: `Bearer ${session?.access_token}`,
                 target_type: "tracks",
+                delay: 5000,
+              },
+              onUploadProgress: (progressEvent) => {
+                let percentCompleted = Math.floor(
+                  (progressEvent.loaded * 100) / progressEvent.total!
+                );
+                props.setTrackUpload({
+                  fileName: acceptedFiles[0],
+                  progress: percentCompleted,
+                });
               },
             }
           );
-        } catch (error) {
+        } catch (error: any) {
           console.log(error?.response?.data?.message);
         }
       }

@@ -30,6 +30,10 @@ function CustomTabPanel(props: TabPanelProps) {
 
 function UploadTabs() {
   const [value, setValue] = useState(0);
+  const [trackUpload, setTrackUpload] = useState({
+    fileName: "",
+    progress: 0,
+  });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -55,10 +59,10 @@ function UploadTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Step1 />
+        <Step1 setValue={setValue} setTrackUpload={setTrackUpload} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Step2 />
+        <Step2 trackUpload={trackUpload} />
       </CustomTabPanel>
     </Box>
   );
