@@ -10,8 +10,9 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { useSession } from "next-auth/react";
+import axios from "axios";
 
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
@@ -51,12 +52,42 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function InputFileUpload() {
+function InputFileUpload(props: any) {
+  const { info, setInfo } = props;
+  const { data: session } = useSession();
+  const handleUpload = async (image: any) => {
+    const formData = new FormData();
+    formData.append("fileUpload", image);
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/files/upload",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            target_type: "images",
+          },
+        }
+      );
+      setInfo({
+        ...info,
+        imageUrl: res.data.data.fileName,
+      });
+    } catch (error: any) {
+      console.log(error?.response?.data?.message);
+    }
+  };
   return (
     <Button
       component="label"
       variant="contained"
       startIcon={<CloudUploadIcon />}
+      onChange={(e) => {
+        const event = e.target as HTMLInputElement;
+        if (event.files) {
+          handleUpload(event.files[0]);
+        }
+      }}
     >
       Upload file
       <VisuallyHiddenInput type="file" />
@@ -68,16 +99,28 @@ interface IProps {
   trackUpload: {
     fileName: string;
     progress: number;
+    fileUrl: string;
   };
 }
 
-function Step2(props: IProps) {
-  const [category, setCategory] = useState("");
-  const { trackUpload } = props;
+interface ITrack {
+  title: string;
+  description: string;
+  trackUrl: string;
+  imageUrl: string;
+  category: string;
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value);
-  };
+function Step2(props: IProps) {
+  const [info, setInfo] = useState<ITrack>({
+    title: "",
+    description: "",
+    trackUrl: "",
+    imageUrl: "",
+    category: "",
+  });
+
+  const { trackUpload } = props;
 
   const categories = [
     {
@@ -94,6 +137,19 @@ function Step2(props: IProps) {
     },
   ];
 
+  useEffect(() => {
+    if (trackUpload && trackUpload.fileUrl) {
+      setInfo({
+        ...info,
+        trackUrl: trackUpload.fileUrl,
+      });
+    }
+  }, [trackUpload]);
+
+  const handleSaveInfo = async () => {
+    console.log(info);
+  };
+
   return (
     <>
       <LinearWithValueLabel trackUpload={trackUpload} />
@@ -105,13 +161,35 @@ function Step2(props: IProps) {
           flexDirection={"column"}
           gap={1}
         >
-          <div style={{ width: 250, height: 250, background: "#ccc" }}></div>
-          <InputFileUpload />
+          <div style={{ width: 250, height: 250, background: "#ccc" }}>
+            {info.imageUrl && (
+              <img
+                height={250}
+                width={250}
+                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${info.imageUrl}`}
+              />
+            )}
+          </div>
+          <InputFileUpload info={info} setInfo={setInfo} />
         </Grid>
         <Grid xs={8} display={"flex"} flexDirection={"column"} gap={3}>
-          <TextField label="Title" variant="standard" fullWidth />
-          <TextField label="Description" variant="standard" fullWidth />
           <TextField
+            value={info?.title}
+            onChange={(e) => setInfo({ ...info, title: e.target.value })}
+            label="Title"
+            variant="standard"
+            fullWidth
+          />
+          <TextField
+            value={info?.description}
+            onChange={(e) => setInfo({ ...info, description: e.target.value })}
+            label="Description"
+            variant="standard"
+            fullWidth
+          />
+          <TextField
+            value={info?.category}
+            onChange={(e) => setInfo({ ...info, category: e.target.value })}
             select
             variant="standard"
             label="Category"
@@ -123,7 +201,11 @@ function Step2(props: IProps) {
               </MenuItem>
             ))}
           </TextField>
-          <Button variant="outlined" sx={{ width: "fit-content" }}>
+          <Button
+            variant="outlined"
+            sx={{ width: "fit-content" }}
+            onClick={() => handleSaveInfo()}
+          >
             Save
           </Button>
         </Grid>

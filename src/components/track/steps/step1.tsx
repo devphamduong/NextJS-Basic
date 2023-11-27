@@ -37,6 +37,11 @@ function InputFileUpload() {
 interface IProps {
   setValue: (v: number) => void;
   setTrackUpload: (v: any) => void;
+  trackUpload: {
+    fileName: string;
+    progress: number;
+    fileUrl: string;
+  };
 }
 
 function Step1(props: IProps) {
@@ -63,12 +68,17 @@ function Step1(props: IProps) {
                   (progressEvent.loaded * 100) / progressEvent.total!
                 );
                 props.setTrackUpload({
+                  ...props.trackUpload,
                   fileName: acceptedFiles[0],
                   progress: percentCompleted,
                 });
               },
             }
           );
+          props.setTrackUpload({
+            ...props.trackUpload,
+            fileUrl: res.data.data.fileName,
+          });
         } catch (error: any) {
           console.log(error?.response?.data?.message);
         }
