@@ -55,8 +55,8 @@ function UploadTabs() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Track" {...a11yProps(0)} />
-          <Tab label="Basic information" {...a11yProps(1)} />
+          <Tab label="Track" disabled={value !== 0} />
+          <Tab label="Basic information" disabled={value !== 1} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -67,7 +67,7 @@ function UploadTabs() {
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <Step2 trackUpload={trackUpload} />
+        <Step2 setValue={setValue} trackUpload={trackUpload} />
       </CustomTabPanel>
     </Box>
   );

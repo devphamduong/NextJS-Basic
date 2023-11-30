@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { sendRequest } from "@/utils/api";
+import { useToast } from "@/utils/toast";
 
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
@@ -54,8 +55,10 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 function InputFileUpload(props: any) {
+  const toast = useToast();
   const { info, setInfo } = props;
   const { data: session } = useSession();
+
   const handleUpload = async (image: any) => {
     const formData = new FormData();
     formData.append("fileUpload", image);
@@ -75,7 +78,7 @@ function InputFileUpload(props: any) {
         imageUrl: res.data.data.fileName,
       });
     } catch (error: any) {
-      console.log(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message);
     }
   };
   return (
@@ -97,6 +100,7 @@ function InputFileUpload(props: any) {
 }
 
 interface IProps {
+  setValue: (v: number) => void;
   trackUpload: {
     fileName: string;
     progress: number;
@@ -113,6 +117,7 @@ interface ITrack {
 }
 
 function Step2(props: IProps) {
+  const toast = useToast();
   const { data: session } = useSession();
   const [info, setInfo] = useState<ITrack>({
     title: "",
@@ -122,7 +127,7 @@ function Step2(props: IProps) {
     category: "",
   });
 
-  const { trackUpload } = props;
+  const { trackUpload, setValue } = props;
 
   const categories = [
     {
@@ -158,15 +163,16 @@ function Step2(props: IProps) {
       body: info,
     });
     if (res.data) {
-      alert("Create track successfully");
+      setValue(0);
+      toast.success("Create track successfully!");
     } else {
-      alert(res.message);
+      toast.error(res.message);
     }
   };
 
   return (
     <>
-      <LinearWithValueLabel trackUpload={trackUpload} />
+      <LinearWithValueLabel trackUpload={trackUpload} setValue={setValue} />
       <Grid container spacing={2} alignItems={"center"}>
         <Grid
           xs={4}

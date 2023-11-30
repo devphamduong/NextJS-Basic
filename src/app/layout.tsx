@@ -1,5 +1,6 @@
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 import NextAuthWrapper from "@/lib/next.auth.wrapper";
+import { ToastProvider } from "@/utils/toast";
 
 export default function RootLayout({
   children,
@@ -10,7 +11,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry>
-          <NextAuthWrapper>{children}</NextAuthWrapper>
+          <NextAuthWrapper>
+            <ToastProvider>{children}</ToastProvider>
+          </NextAuthWrapper>
         </ThemeRegistry>
       </body>
     </html>

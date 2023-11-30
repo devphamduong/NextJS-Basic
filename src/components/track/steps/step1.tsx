@@ -61,7 +61,6 @@ function Step1(props: IProps) {
               headers: {
                 Authorization: `Bearer ${session?.access_token}`,
                 target_type: "tracks",
-                delay: 5000,
               },
               onUploadProgress: (progressEvent) => {
                 let percentCompleted = Math.floor(
