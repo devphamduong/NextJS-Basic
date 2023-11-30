@@ -11,7 +11,6 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -20,6 +19,7 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -106,7 +106,7 @@ export default function AppHeader() {
     >
       <MenuItem>
         <Link
-          href={"/profile"}
+          href={`/profile/${session?.user._id}`}
           style={{ color: "unset", textDecoration: "unset" }}
         >
           Profile
@@ -163,9 +163,9 @@ export default function AppHeader() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <SettingsIcon />
         </IconButton>
-        <p>Profile</p>
+        <p>Settings</p>
       </MenuItem>
     </Menu>
   );

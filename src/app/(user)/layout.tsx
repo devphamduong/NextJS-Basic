@@ -8,9 +8,13 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <AppHeader />
+      <div style={{ marginBottom: "50px" }}>
+        <AppHeader />
+      </div>
       {children}
-      <AppFooter />
+      <div style={{ marginTop: "50px" }}>
+        <AppFooter />
+      </div>
     </>
   );
 }

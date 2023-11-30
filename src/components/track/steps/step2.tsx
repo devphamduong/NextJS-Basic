@@ -75,7 +75,7 @@ function InputFileUpload(props: any) {
       );
       setInfo({
         ...info,
-        imageUrl: res.data.data.fileName,
+        imgUrl: res.data.data.fileName,
       });
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
@@ -112,7 +112,7 @@ interface ITrack {
   title: string;
   description: string;
   trackUrl: string;
-  imageUrl: string;
+  imgUrl: string;
   category: string;
 }
 
@@ -123,7 +123,7 @@ function Step2(props: IProps) {
     title: "",
     description: "",
     trackUrl: "",
-    imageUrl: "",
+    imgUrl: "",
     category: "",
   });
 
@@ -154,6 +154,7 @@ function Step2(props: IProps) {
   }, [trackUpload]);
 
   const handleSaveInfo = async () => {
+    console.log(info);
     const res = await sendRequest<IBackendRes<ITrackTop[]>>({
       url: "http://localhost:8000/api/v1/tracks",
       method: "POST",
@@ -182,11 +183,11 @@ function Step2(props: IProps) {
           gap={1}
         >
           <div style={{ width: 250, height: 250, background: "#ccc" }}>
-            {info.imageUrl && (
+            {info.imgUrl && (
               <img
                 height={250}
                 width={250}
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${info.imageUrl}`}
+                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${info.imgUrl}`}
               />
             )}
           </div>

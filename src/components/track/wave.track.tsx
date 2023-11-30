@@ -151,7 +151,7 @@ function WaveTrack(props: any) {
   };
 
   return (
-    <div style={{ marginTop: 20 }}>
+    <>
       <div
         style={{
           display: "flex",
@@ -271,7 +271,7 @@ function WaveTrack(props: any) {
           }}
         ></div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -40,13 +40,6 @@ function UploadTabs() {
     setValue(newValue);
   };
 
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`,
-    };
-  }
-
   return (
     <Box sx={{ width: "100%", border: "1px solid #ccc", mt: 5 }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
