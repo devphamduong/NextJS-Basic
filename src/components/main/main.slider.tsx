@@ -89,7 +89,9 @@ function MainSlider(props: IProps) {
                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${item.imgUrl}`}
                 alt={item.title}
               />
-              <Link href={`/track/${item._id}?audio=${item.trackUrl}`}>
+              <Link
+                href={`/track/${item._id}?audio=${item.trackUrl}&id=${item._id}`}
+              >
                 <h4 style={{ cursor: "pointer" }}>{item.title}</h4>
               </Link>
               <h5>{item.description}</h5>

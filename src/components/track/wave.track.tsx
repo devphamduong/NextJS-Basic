@@ -12,15 +12,24 @@ import "./wave.track.scss";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Tooltip } from "@mui/material";
+import { useSearchParams } from "next/navigation";
+import { sendRequest } from "@/utils/api";
+import { useTrackContext } from "@/lib/track.wrapper";
 
-function WaveTrack(props: any) {
+interface IProps {
+  track: ITrackTop | null;
+}
+
+function WaveTrack(props: IProps) {
+  const { track } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState<string>("0:00");
   const [duration, setDuration] = useState<string>("0:00");
   const hoverRef = useRef<HTMLDivElement>(null);
-
-  const { audio } = props;
+  const searchParams = useSearchParams();
+  const audio = searchParams.get("audio");
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
   const optionsMemo = useMemo((): Omit<WaveSurferOptions, "container"> => {
     let gradient, progressGradient;
     if (typeof window !== "undefined") {
@@ -137,6 +146,18 @@ function WaveTrack(props: any) {
     };
   }, [wavesurfer]);
 
+  useEffect(() => {
+    if (wavesurfer && currentTrack.isPlaying) {
+      wavesurfer.pause();
+    }
+  }, [currentTrack]);
+
+  useEffect(() => {
+    if (track?._id && !currentTrack._id) {
+      setCurrentTrack({ ...track, isPlaying: false });
+    }
+  }, [track]);
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secondsRemainder = Math.round(seconds) % 60;
@@ -175,7 +196,15 @@ function WaveTrack(props: any) {
           <div className="info" style={{ display: "flex" }}>
             <div>
               <div
-                onClick={onPlayClick}
+                onClick={() => {
+                  onPlayClick();
+                  if (track && wavesurfer) {
+                    setCurrentTrack({
+                      ...currentTrack,
+                      isPlaying: false,
+                    });
+                  }
+                }}
                 style={{
                   borderRadius: "50%",
                   background: "#f50",
@@ -204,7 +233,7 @@ function WaveTrack(props: any) {
                   color: "white",
                 }}
               >
-                DuongPC
+                {track?.title}
               </div>
               <div
                 style={{
@@ -216,7 +245,7 @@ function WaveTrack(props: any) {
                   color: "white",
                 }}
               >
-                DuongPC
+                {track?.description}
               </div>
             </div>
           </div>

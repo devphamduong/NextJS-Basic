@@ -11,7 +11,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import { useTrackContext } from "@/lib/track.wrapper";
-import { useState } from "react";
+import Link from "next/link";
 
 function ProfileTrack(props: any) {
   const theme = useTheme();
@@ -23,9 +23,17 @@ function ProfileTrack(props: any) {
       <Card sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography component="div" variant="h5">
-              {data.title}
-            </Typography>
+            <Link
+              style={{
+                textDecoration: "none",
+                color: "unset",
+              }}
+              href={`/track/${data._id}?audio=${data.trackUrl}&id=${data._id}`}
+            >
+              <Typography component="div" variant="h5">
+                {data.title}
+              </Typography>
+            </Link>
             <Typography
               variant="subtitle1"
               color="text.secondary"

@@ -5,20 +5,22 @@ import "react-h5-audio-player/lib/styles.css";
 import { Container } from "@mui/material";
 import { useHasMounted } from "@/utils/customHook";
 import { useTrackContext } from "@/lib/track.wrapper";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function AppFooter() {
+  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
   const hasMounted = useHasMounted();
   const playRef = useRef(null);
+
+  useEffect(() => {
+    if (currentTrack.isPlaying) {
+      playRef?.current?.audio?.current?.play();
+    } else {
+      playRef?.current?.audio?.current?.pause();
+    }
+  }, [currentTrack]);
+
   if (!hasMounted) return <></>;
-
-  const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
-
-  if (currentTrack.isPlaying) {
-    playRef?.current?.audio?.current?.play();
-  } else {
-    playRef?.current?.audio?.current?.pause();
-  }
 
   return (
     <AppBar
@@ -47,8 +49,8 @@ function AppFooter() {
           layout="horizontal-reverse"
         />
         <div>
-          <div style={{ color: "#868686" }}>Author</div>
-          <div style={{ color: "black" }}>Name</div>
+          <div style={{ color: "#868686" }}>{currentTrack.description}</div>
+          <div style={{ color: "black" }}>{currentTrack.title}</div>
         </div>
       </Container>
     </AppBar>
