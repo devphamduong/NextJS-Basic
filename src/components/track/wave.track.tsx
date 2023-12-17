@@ -13,15 +13,17 @@ import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Tooltip } from "@mui/material";
 import { useSearchParams } from "next/navigation";
-import { sendRequest } from "@/utils/api";
 import { useTrackContext } from "@/lib/track.wrapper";
+import { fetchDefaultImage } from "@/utils/api";
+import CommentTrack from "./comment.track";
 
 interface IProps {
   track: ITrackTop | null;
+  comments: ITrackComment[] | null;
 }
 
 function WaveTrack(props: IProps) {
-  const { track } = props;
+  const { track, comments } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState<string>("0:00");
   const [duration, setDuration] = useState<string>("0:00");
@@ -87,29 +89,6 @@ function WaveTrack(props: IProps) {
       url: `/api?audio=${audio}`,
     };
   }, []);
-  const arrComments = [
-    {
-      id: 1,
-      avatar: "http://localhost:8000/images/chill1.png",
-      moment: 10,
-      user: "username 1",
-      content: "just a comment1",
-    },
-    {
-      id: 2,
-      avatar: "http://localhost:8000/images/chill1.png",
-      moment: 30,
-      user: "username 2",
-      content: "just a comment2",
-    },
-    {
-      id: 3,
-      avatar: "http://localhost:8000/images/chill1.png",
-      moment: 50,
-      user: "username 3",
-      content: "just a comment3",
-    },
-  ];
   const wavesurfer = useWavesurfer(containerRef, optionsMemo);
 
   const onPlayClick = useCallback(() => {
@@ -153,7 +132,7 @@ function WaveTrack(props: IProps) {
   }, [currentTrack]);
 
   useEffect(() => {
-    if (track?._id && !currentTrack._id) {
+    if (track?._id && !currentTrack?._id) {
       setCurrentTrack({ ...track, isPlaying: false });
     }
   }, [track]);
@@ -198,7 +177,7 @@ function WaveTrack(props: IProps) {
               <div
                 onClick={() => {
                   onPlayClick();
-                  if (track && wavesurfer) {
+                  if (track) {
                     setCurrentTrack({
                       ...currentTrack,
                       isPlaying: false,
@@ -264,9 +243,9 @@ function WaveTrack(props: IProps) {
               }}
             ></div>
             <div className="comments" style={{ position: "relative" }}>
-              {arrComments.map((item, index) => {
+              {comments?.map((item, index) => {
                 return (
-                  <Tooltip key={item.id} title={item.content} arrow>
+                  <Tooltip key={item._id} title={item.content} arrow>
                     <img
                       onPointerMove={(e) => {
                         const hover = hoverRef.current!;
@@ -280,7 +259,7 @@ function WaveTrack(props: IProps) {
                         left: calcLeft(item.moment),
                         zIndex: 9,
                       }}
-                      src={`http://localhost:8000/images/chill1.png`}
+                      src={fetchDefaultImage(item.user.type)}
                     />
                   </Tooltip>
                 );
@@ -292,13 +271,30 @@ function WaveTrack(props: IProps) {
           className="right"
           style={{
             width: "25%",
-            height: "calc(100% - 10px)",
             padding: 15,
             display: "flex",
             alignItems: "center",
-            background: "#CDCBCD",
           }}
-        ></div>
+        >
+          {track?.imgUrl ? (
+            <img
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track?.imgUrl}`}
+              width={250}
+              height={250}
+            />
+          ) : (
+            <div
+              style={{
+                background: "#ccc",
+                width: 250,
+                height: 250,
+              }}
+            ></div>
+          )}
+        </div>
+      </div>
+      <div style={{ marginTop: 10 }}>
+        <CommentTrack track={track} comments={comments} />
       </div>
     </>
   );

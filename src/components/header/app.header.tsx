@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { fetchDefaultImage } from "@/utils/api";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -211,7 +212,10 @@ export default function AppHeader() {
                   <Link href={"/playlist"}>Playlists</Link>
                   <Link href={"/like"}>Likes</Link>
                   <Link href={"/track/upload"}>Upload</Link>
-                  <Avatar onClick={handleProfileMenuOpen}>PC</Avatar>
+                  <Avatar
+                    onClick={handleProfileMenuOpen}
+                    src={fetchDefaultImage(session.user.type)}
+                  />
                 </>
               ) : (
                 <>

@@ -79,3 +79,9 @@ export const sendRequestFile = async <T>(props: IRequest) => {
     }
   });
 };
+
+export const fetchDefaultImage = (type: string) => {
+  if (type === "GITHUB") return "/img/default-github.png";
+  if (type === "GOOGLE") return "/img/default-google.png";
+  return "/img/default-user.png";
+};
